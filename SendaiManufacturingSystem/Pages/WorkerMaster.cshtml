@@ -1,0 +1,272 @@
+@page
+@model SendaiManufacturingSystem.Pages.WorkerMasterModel
+@{
+    ViewData["Title"] = "作業者マスタ";
+}
+
+<style>
+    .main-container {
+        font-family: "Yu Gothic", "Meiryo", sans-serif;
+        background-color: #f0f0f0;
+        padding: 20px;
+        min-height: 100vh;
+    }
+
+    .header-title {
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .subtitle {
+        text-align: center;
+        font-size: 18px;
+        color: #666;
+        margin-bottom: 30px;
+    }
+
+    .content-area {
+        display: flex;
+        gap: 30px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .left-panel {
+        flex: 2;
+    }
+
+    .right-panel {
+        flex: 1;
+    }
+
+    .worker-table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: white;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .worker-table th {
+        background-color: #b8cce4;
+        border: 1px solid #666;
+        padding: 8px;
+        text-align: center;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .worker-table td {
+        border: 1px solid #666;
+        padding: 8px;
+        text-align: center;
+        background-color: white;
+    }
+
+    .worker-table tr:hover {
+        background-color: #f5f5f5;
+    }
+
+    .form-panel {
+        background-color: white;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+    }
+
+    .form-label {
+        background-color: #b8cce4;
+        border: 1px solid #666;
+        padding: 8px 12px;
+        min-width: 120px;
+        text-align: center;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .form-input {
+        border: 1px solid #666;
+        padding: 8px;
+        flex: 1;
+        font-size: 14px;
+    }
+
+    .button-container {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .btn-register, .btn-delete {
+        padding: 10px 20px;
+        font-size: 14px;
+        font-weight: bold;
+        border: 2px solid #333;
+        border-radius: 5px;
+        cursor: pointer;
+        min-width: 80px;
+        background: linear-gradient(to bottom, #e8e8e8, #d0d0d0);
+        color: #333;
+    }
+
+    .btn-register:hover, .btn-delete:hover {
+        background: linear-gradient(to bottom, #d0d0d0, #b8b8b8);
+    }
+
+    .bottom-buttons {
+        text-align: center;
+        margin-top: 40px;
+    }
+
+    .btn-bottom {
+        padding: 10px 25px;
+        font-size: 14px;
+        font-weight: bold;
+        border: 2px solid #333;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 0 10px;
+        background: linear-gradient(to bottom, #e8e8e8, #d0d0d0);
+        color: #333;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-bottom:hover {
+        background: linear-gradient(to bottom, #d0d0d0, #b8b8b8);
+        text-decoration: none;
+        color: #333;
+    }
+
+    .message-area {
+        background-color: white;
+        border: 1px solid #666;
+        padding: 15px;
+        margin-bottom: 20px;
+        min-height: 60px;
+        text-align: center;
+        color: #666;
+        font-size: 14px;
+    }
+
+    .validation-summary {
+        color: red;
+        font-size: 12px;
+        margin-top: 5px;
+    }
+
+    .empty-row {
+        height: 35px;
+    }
+</style>
+
+<div class="main-container">
+    <h1 class="header-title">仙台製造所 本数計管理システム</h1>
+    <h2 class="subtitle">作業者マスタ</h2>
+
+    <div class="content-area">
+        <div class="left-panel">
+            <!-- 作業者テーブル -->
+            <table class="worker-table">
+                <thead>
+                    <tr>
+                        <th>作業者番号</th>
+                        <th>名前1</th>
+                        <th>名前2</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var worker in Model.Workers)
+                    {
+                        <tr>
+                            <td>@worker.WorkerNumber</td>
+                            <td>@worker.FirstName</td>
+                            <td>@worker.LastName</td>
+                        </tr>
+                    }
+                    @for (int i = Model.Workers.Count; i < 8; i++)
+                    {
+                        <tr class="empty-row">
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="right-panel">
+            <!-- 入力フォーム -->
+            <div class="form-panel">
+                <form method="post">
+                    <div class="form-group">
+                        <label class="form-label">作業者番号</label>
+                        <input asp-for="Worker.WorkerNumber" class="form-input" maxlength="3" />
+                    </div>
+                    <span asp-validation-for="Worker.WorkerNumber" class="validation-summary"></span>
+
+                    <div class="form-group">
+                        <label class="form-label">名前1(性)</label>
+                        <input asp-for="Worker.FirstName" class="form-input" />
+                    </div>
+                    <span asp-validation-for="Worker.FirstName" class="validation-summary"></span>
+
+                    <div class="form-group">
+                        <label class="form-label">名前2(名)</label>
+                        <input asp-for="Worker.LastName" class="form-input" />
+                    </div>
+                    <span asp-validation-for="Worker.LastName" class="validation-summary"></span>
+
+                    <div class="button-container">
+                        <button type="submit" asp-page-handler="Register" class="btn-register">登録</button>
+                        <button type="button" class="btn-delete" onclick="clearForm()">削除</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- メッセージ領域 -->
+    <div class="message-area">
+        メッセージ領域
+        @if (ViewData.ModelState.Count > 0 && !ViewData.ModelState.IsValid)
+        {
+            <div style="color: red;">
+                入力エラーがあります。確認してください。
+            </div>
+        }
+    </div>
+
+    <!-- 下部ボタン -->
+    <div class="bottom-buttons">
+        <button class="btn-bottom" onclick="searchWorkers()">検索・一覧</button>
+        <a href="/WorkerMaster" class="btn-bottom">作業者</a>
+        <button class="btn-bottom">パラメータ</button>
+        <button class="btn-bottom">サーバ管理</button>
+    </div>
+</div>
+
+<script>
+    function clearForm() {
+        document.getElementById('Worker_WorkerNumber').value = '';
+        document.getElementById('Worker_FirstName').value = '';
+        document.getElementById('Worker_LastName').value = '';
+    }
+
+    function searchWorkers() {
+        alert('検索機能は実装予定です。');
+    }
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

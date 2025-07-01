@@ -1,0 +1,83 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "仙台製造所 本数計管理システム";
+}
+
+<style>
+    .main-container {
+        font-family: "Yu Gothic", "Meiryo", sans-serif;
+        background-color: #f0f0f0;
+        padding: 40px;
+        min-height: 100vh;
+        text-align: center;
+    }
+
+    .header-title {
+        font-size: 32px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 40px;
+    }
+
+    .menu-container {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .menu-item {
+        display: block;
+        background: linear-gradient(to bottom, #e8e8e8, #d0d0d0);
+        border: 2px solid #333;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 15px 0;
+        text-decoration: none;
+        color: #333;
+        font-size: 18px;
+        font-weight: bold;
+        transition: all 0.3s;
+    }
+
+    .menu-item:hover {
+        background: linear-gradient(to bottom, #d0d0d0, #b8b8b8);
+        text-decoration: none;
+        color: #333;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .description {
+        font-size: 16px;
+        color: #666;
+        margin-top: 40px;
+        line-height: 1.6;
+    }
+</style>
+
+<div class="main-container">
+    <h1 class="header-title">仙台製造所 本数計管理システム</h1>
+    
+    <div class="menu-container">
+        <a href="/WorkerMaster" class="menu-item">
+            作業者マスタ管理
+        </a>
+        
+        <a href="#" class="menu-item" onclick="alert('検索機能は実装予定です。')">
+            検索・一覧
+        </a>
+        
+        <a href="#" class="menu-item" onclick="alert('パラメータ設定は実装予定です。')">
+            パラメータ設定
+        </a>
+        
+        <a href="#" class="menu-item" onclick="alert('サーバ管理は実装予定です。')">
+            サーバ管理
+        </a>
+    </div>
+
+    <div class="description">
+        <p>本システムは仙台製造所の本数計管理を行うシステムです。</p>
+        <p>作業者マスタ管理から始めて、各機能をご利用ください。</p>
+    </div>
+</div>
