@@ -1,0 +1,266 @@
+﻿@{
+    ViewData["Title"] = "仙台製造所 本数計管理システム";
+}
+
+<style>
+    body {
+        font-family: "MS Gothic", monospace;
+        font-size: 14px;
+        margin: 0;
+        padding: 20px;
+        background-color: #f0f0f0;
+    }
+    
+    .header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    
+    .subtitle {
+        font-size: 18px;
+        margin-bottom: 20px;
+    }
+    
+    .container {
+        display: flex;
+        gap: 20px;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+    
+    .left-panel {
+        flex: 1;
+    }
+    
+    .right-panel {
+        width: 300px;
+    }
+    
+    .data-table {
+        border-collapse: collapse;
+        width: 100%;
+        border: 2px solid #000;
+        background-color: white;
+    }
+    
+    .data-table th {
+        background-color: #a8b9d8;
+        border: 1px solid #000;
+        padding: 8px;
+        text-align: center;
+        font-weight: bold;
+    }
+    
+    .data-table td {
+        border: 1px solid #000;
+        padding: 8px;
+        text-align: center;
+        cursor: pointer;
+    }
+    
+    .data-table tr:hover {
+        background-color: #e8e8e8;
+    }
+    
+    .data-table tr.selected {
+        background-color: #d4d4d4;
+    }
+    
+    .input-section {
+        border: 2px solid #000;
+        padding: 15px;
+        background-color: white;
+        margin-bottom: 20px;
+    }
+    
+    .input-row {
+        display: flex;
+        margin-bottom: 10px;
+        align-items: center;
+    }
+    
+    .input-label {
+        background-color: #a8b9d8;
+        border: 1px solid #000;
+        padding: 5px 10px;
+        width: 100px;
+        text-align: center;
+        font-weight: bold;
+    }
+    
+    .input-field {
+        border: 1px solid #000;
+        padding: 5px;
+        width: 150px;
+    }
+    
+    .btn {
+        background: linear-gradient(to bottom, #e8e8e8, #d0d0d0);
+        border: 2px outset #d0d0d0;
+        padding: 8px 20px;
+        font-size: 14px;
+        cursor: pointer;
+        margin-right: 10px;
+    }
+    
+    .btn:hover {
+        background: linear-gradient(to bottom, #f0f0f0, #d8d8d8);
+    }
+    
+    .btn:active {
+        border: 2px inset #d0d0d0;
+    }
+    
+    .message-area {
+        border: 2px solid #000;
+        padding: 15px;
+        background-color: white;
+        margin: 20px auto;
+        max-width: 1000px;
+    }
+    
+    .message-header {
+        background-color: #a8b9d8;
+        border: 1px solid #000;
+        padding: 5px 10px;
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    
+    .bottom-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin-top: 20px;
+    }
+    
+    .bottom-btn {
+        background: linear-gradient(to bottom, #e8e8e8, #d0d0d0);
+        border: 2px outset #d0d0d0;
+        padding: 10px 30px;
+        font-size: 14px;
+        cursor: pointer;
+    }
+</style>
+
+<div class="header">
+    <div class="title">仙台製造所 本数計管理システム</div>
+    <div class="subtitle">作業者マスタ</div>
+</div>
+
+<div class="container">
+    <div class="left-panel">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th style="width: 120px;">作業者番号</th>
+                    <th style="width: 120px;">名前1</th>
+                    <th style="width: 120px;">名前2</th>
+                </tr>
+            </thead>
+            <tbody id="workerTable">
+                @if (ViewBag.Workers != null)
+                {
+                    @foreach (var worker in (List<SimpleWorkerSystem.Models.Worker>)ViewBag.Workers)
+                    {
+                        <tr onclick="selectWorker('@worker.Id', '@worker.Name1', '@worker.Name2')">
+                            <td>@worker.Id</td>
+                            <td>@worker.Name1</td>
+                            <td>@worker.Name2</td>
+                        </tr>
+                    }
+                }
+                @for (int i = 0; i < 6; i++)
+                {
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="right-panel">
+        <div class="input-section">
+            <form id="workerForm" method="post" action="/Home/AddWorker">
+                <div class="input-row">
+                    <div class="input-label">作業者番号</div>
+                    <input type="text" name="id" id="workerId" class="input-field" value="001" maxlength="3" />
+                </div>
+                <div class="input-row">
+                    <div class="input-label">名前1(性)</div>
+                    <input type="text" name="name1" id="name1" class="input-field" value="JFE" />
+                </div>
+                <div class="input-row">
+                    <div class="input-label">名前2(名)</div>
+                    <input type="text" name="name2" id="name2" class="input-field" value="タロウ" />
+                </div>
+                <div style="margin-top: 15px;">
+                    <button type="submit" class="btn">登録</button>
+                    <button type="button" class="btn" onclick="deleteWorker()">削除</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="message-area">
+    <div class="message-header">メッセージ領域</div>
+    <div>@ViewBag.Message</div>
+</div>
+
+<div class="bottom-buttons">
+    <button type="button" class="bottom-btn" onclick="alert('検索・一覧機能')">検索・一覧</button>
+    <button type="button" class="bottom-btn" onclick="alert('作業者機能')">作業者</button>
+    <button type="button" class="bottom-btn" onclick="alert('パラメータ機能')">パラメータ</button>
+    <button type="button" class="bottom-btn" onclick="alert('サーバー管理機能')">サーバー管理</button>
+</div>
+
+<script>
+    function selectWorker(id, name1, name2) {
+        // 既存の選択をクリア
+        document.querySelectorAll('#workerTable tr').forEach(row => {
+            row.classList.remove('selected');
+        });
+        
+        // クリックされた行を選択
+        event.target.closest('tr').classList.add('selected');
+        
+        // フォームに値を設定
+        document.getElementById('workerId').value = id;
+        document.getElementById('name1').value = name1;
+        document.getElementById('name2').value = name2;
+    }
+    
+    function deleteWorker() {
+        var id = document.getElementById('workerId').value;
+        if (!id) {
+            alert('削除する作業者を選択してください。');
+            return;
+        }
+        
+        if (confirm('作業者 ' + id + ' を削除しますか？')) {
+            var form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/Home/DeleteWorker';
+            
+            var input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'id';
+            input.value = id;
+            
+            form.appendChild(input);
+            document.body.appendChild(form);
+            form.submit();
+        }
+    }
+</script>
