@@ -1,0 +1,335 @@
+@{
+    ViewData["Title"] = "仙台製造所 本数計管理システム - 作業者マスタ";
+}
+
+<style>
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        font-family: "MS Gothic", monospace;
+        font-size: 14px;
+    }
+
+    .header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .system-title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .page-title {
+        font-size: 18px;
+        margin-bottom: 20px;
+    }
+
+    .main-layout {
+        display: flex;
+        gap: 20px;
+    }
+
+    .left-panel {
+        flex: 1;
+    }
+
+    .right-panel {
+        width: 300px;
+    }
+
+    .data-table {
+        border-collapse: collapse;
+        width: 100%;
+        border: 2px solid #000;
+        margin-bottom: 20px;
+    }
+
+    .data-table th, .data-table td {
+        border: 1px solid #000;
+        padding: 8px;
+        text-align: center;
+        font-size: 14px;
+    }
+
+    .data-table th {
+        background-color: #a8b9d8;
+        font-weight: bold;
+    }
+
+    .data-table .selected-row {
+        background-color: #d4d4d4;
+    }
+
+    .input-section {
+        border: 2px solid #000;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    .input-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .input-label {
+        background-color: #a8b9d8;
+        border: 1px solid #000;
+        padding: 5px 10px;
+        width: 100px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .input-field {
+        border: 1px solid #000;
+        padding: 5px;
+        width: 150px;
+        margin-left: 0;
+    }
+
+    .button-group {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    .btn {
+        background: linear-gradient(to bottom, #e8e8e8, #d0d0d0);
+        border: 2px outset #d0d0d0;
+        padding: 8px 20px;
+        font-size: 14px;
+        cursor: pointer;
+        min-width: 80px;
+    }
+
+    .btn:hover {
+        background: linear-gradient(to bottom, #f0f0f0, #d8d8d8);
+    }
+
+    .btn:active {
+        border: 2px inset #d0d0d0;
+    }
+
+    .message-area {
+        border: 2px solid #000;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    .message-title {
+        background-color: #a8b9d8;
+        border: 1px solid #000;
+        padding: 5px 10px;
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .bottom-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .bottom-btn {
+        background: linear-gradient(to bottom, #e8e8e8, #d0d0d0);
+        border: 2px outset #d0d0d0;
+        padding: 10px 30px;
+        font-size: 14px;
+        cursor: pointer;
+        min-width: 120px;
+    }
+
+    .empty-row {
+        height: 25px;
+    }
+</style>
+
+<div class="container">
+    <div class="header">
+        <div class="system-title">仙台製造所 本数計管理システム</div>
+        <div class="page-title">作業者マスタ</div>
+    </div>
+
+    <div class="main-layout">
+        <div class="left-panel">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th style="width: 120px;">作業者番号</th>
+                        <th style="width: 120px;">名前1</th>
+                        <th style="width: 120px;">名前2</th>
+                    </tr>
+                </thead>
+                <tbody id="workerTableBody">
+                    @if (ViewBag.Workers != null)
+                    {
+                        @foreach (var worker in (List<SeizoManagementSystem.Models.Worker>)ViewBag.Workers)
+                        {
+                            <tr class="worker-row" data-worker-id="@worker.WorkerId">
+                                <td>@worker.WorkerId</td>
+                                <td>@worker.Name1</td>
+                                <td>@worker.Name2</td>
+                            </tr>
+                        }
+                    }
+                    @for (int i = 0; i < 8; i++)
+                    {
+                        <tr class="empty-row">
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="right-panel">
+            <div class="input-section">
+                <form id="workerForm" method="post">
+                    <div class="input-group">
+                        <div class="input-label">作業者番号</div>
+                        <input type="text" name="WorkerId" id="workerId" class="input-field" maxlength="3" value="001" />
+                    </div>
+                    <div class="input-group">
+                        <div class="input-label">名前1(性)</div>
+                        <input type="text" name="Name1" id="name1" class="input-field" value="JFE" />
+                    </div>
+                    <div class="input-group">
+                        <div class="input-label">名前2(名)</div>
+                        <input type="text" name="Name2" id="name2" class="input-field" value="タロウ" />
+                    </div>
+                    <div class="button-group">
+                        <button type="button" class="btn" onclick="registerWorker()">登録</button>
+                        <button type="button" class="btn" onclick="deleteWorker()">削除</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="message-area">
+        <div class="message-title">メッセージ領域</div>
+        <div id="messageContent"></div>
+    </div>
+
+    <div class="bottom-buttons">
+        <button type="button" class="bottom-btn" onclick="searchData()">検索・一覧</button>
+        <button type="button" class="bottom-btn" onclick="maintenance()">作業者</button>
+        <button type="button" class="bottom-btn" onclick="parameter()">パラメータ</button>
+        <button type="button" class="bottom-btn" onclick="serverManagement()">サーバー管理</button>
+    </div>
+</div>
+
+<script>
+    // 行選択機能
+    document.addEventListener('DOMContentLoaded', function() {
+        const rows = document.querySelectorAll('.worker-row');
+        rows.forEach(row => {
+            row.addEventListener('click', function() {
+                // 既存の選択をクリア
+                document.querySelectorAll('.worker-row').forEach(r => r.classList.remove('selected-row'));
+                // 現在の行を選択
+                this.classList.add('selected-row');
+                
+                // フォームに値を設定
+                const workerId = this.dataset.workerId;
+                loadWorkerData(workerId);
+            });
+        });
+    });
+
+    function loadWorkerData(workerId) {
+        fetch(`/WorkerMaster/GetWorker?workerId=${workerId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('workerId').value = data.worker.workerId;
+                    document.getElementById('name1').value = data.worker.name1;
+                    document.getElementById('name2').value = data.worker.name2;
+                }
+            });
+    }
+
+    function registerWorker() {
+        const form = document.getElementById('workerForm');
+        const formData = new FormData(form);
+        
+        fetch('/WorkerMaster/Register', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('messageContent').innerHTML = '作業者情報を登録しました。';
+            location.reload();
+        })
+        .catch(error => {
+            document.getElementById('messageContent').innerHTML = 'エラーが発生しました。';
+        });
+    }
+
+    function deleteWorker() {
+        const workerId = document.getElementById('workerId').value;
+        if (!workerId) {
+            document.getElementById('messageContent').innerHTML = '削除する作業者を選択してください。';
+            return;
+        }
+
+        if (confirm('選択した作業者を削除しますか？')) {
+            const formData = new FormData();
+            formData.append('workerId', workerId);
+            
+            fetch('/WorkerMaster/Delete', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('messageContent').innerHTML = '作業者情報を削除しました。';
+                location.reload();
+            })
+            .catch(error => {
+                document.getElementById('messageContent').innerHTML = 'エラーが発生しました。';
+            });
+        }
+    }
+
+    function searchData() {
+        fetch('/WorkerMaster/Search', { method: 'POST' })
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('messageContent').innerHTML = '検索・一覧を実行しました。';
+            });
+    }
+
+    function maintenance() {
+        fetch('/WorkerMaster/Maintenance', { method: 'POST' })
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('messageContent').innerHTML = '作業者メンテナンスを実行しました。';
+            });
+    }
+
+    function parameter() {
+        fetch('/WorkerMaster/Parameter', { method: 'POST' })
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('messageContent').innerHTML = 'パラメータ設定を実行しました。';
+            });
+    }
+
+    function serverManagement() {
+        fetch('/WorkerMaster/ServerManagement', { method: 'POST' })
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('messageContent').innerHTML = 'サーバー管理を実行しました。';
+            });
+    }
+</script>
